@@ -39,15 +39,21 @@ export const ShapeSidebar = ({
       <ScrollArea>
         <div className="grid grid-cols-3 gap-4 p-4">
           <ShapeTool onClick={() => editor?.addCircle()} icon={FaCircle} />
-          <ShapeTool onClick={() => {}} icon={FaSquare} />
-          <ShapeTool onClick={() => {}} icon={FaSquareFull} />
-          <ShapeTool onClick={() => {}} icon={IoTriangle} />
           <ShapeTool
-            onClick={() => {}}
+            onClick={() => editor?.addSoftRectangle()}
+            icon={FaSquare}
+          />
+          <ShapeTool
+            onClick={() => editor?.addRectangle()}
+            icon={FaSquareFull}
+          />
+          <ShapeTool onClick={() => editor?.addTriangle()} icon={IoTriangle} />
+          <ShapeTool
+            onClick={() => editor?.addInverseTriangle()}
             icon={IoTriangle}
             iconClassName="rotate-180"
           />
-          <ShapeTool onClick={() => {}} icon={FaDiamond} />
+          <ShapeTool onClick={() => editor?.addDiamond()} icon={FaDiamond} />
         </div>
       </ScrollArea>
       <ToolSidebarClose onClick={onClose} />
