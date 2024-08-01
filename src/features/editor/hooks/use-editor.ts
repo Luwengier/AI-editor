@@ -12,6 +12,7 @@ import {
   BuildEditorProps,
   RECTANGLE_OPTIONS,
   EditorHookProps,
+  STROKE_DASH_ARRAY,
 } from '@/features/editor/types';
 import { isTextType } from '@/features/editor/utils';
 import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
@@ -26,6 +27,8 @@ const buildEditor = ({
   setStrokeColor,
   setStrokeWidth,
   selectedObjects,
+  strokeDashArray,
+  setStrokeDashArray,
 }: BuildEditorProps): Editor => {
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === 'clip');
@@ -60,7 +63,39 @@ const buildEditor = ({
     return selectedObject?.get('stroke') || strokeColor;
   };
 
+  const getActiveStrokeWidth = () => {
+    const selectedObject = selectedObjects[0];
+
+    return selectedObject?.get('strokeWidth') || strokeWidth;
+  };
+
+  const getActiveStrokeDashArray = () => {
+    const selectedObject = selectedObjects[0];
+
+    return selectedObject?.get('strokeDashArray') || strokeDashArray;
+  };
+
   return {
+    bringForward: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.bringForward(object);
+      });
+
+      canvas.renderAll();
+
+      const workspace = getWorkspace();
+      workspace?.sendBackwards();
+    },
+    sendBackward: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.sendBackwards(object);
+      });
+
+      canvas.renderAll();
+
+      const workspace = getWorkspace();
+      workspace?.sendBackwards();
+    },
     changeFillColor: (color: string) => {
       setFillColor(color);
       canvas.getActiveObjects().forEach((object) => {
@@ -88,12 +123,20 @@ const buildEditor = ({
       });
       canvas.renderAll();
     },
+    changeStrokeDashArray: (value: number[]) => {
+      setStrokeDashArray(value);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeDashArray: value });
+      });
+      canvas.renderAll();
+    },
     addCircle: () => {
       const object = new fabric.Circle({
         ...CIRCLE_OPTIONS,
         fill: fillColor,
         stroke: strokeColor,
-        strokeWidth: strokeWidth,
+        strokeWidth,
+        strokeDashArray,
       });
 
       addToCanvas(object);
@@ -105,7 +148,8 @@ const buildEditor = ({
         ry: 50,
         fill: fillColor,
         stroke: strokeColor,
-        strokeWidth: strokeWidth,
+        strokeWidth,
+        strokeDashArray,
       });
 
       addToCanvas(object);
@@ -115,7 +159,8 @@ const buildEditor = ({
         ...RECTANGLE_OPTIONS,
         fill: fillColor,
         stroke: strokeColor,
-        strokeWidth: strokeWidth,
+        strokeWidth,
+        strokeDashArray,
       });
 
       addToCanvas(object);
@@ -125,7 +170,8 @@ const buildEditor = ({
         ...RECTANGLE_OPTIONS,
         fill: fillColor,
         stroke: strokeColor,
-        strokeWidth: strokeWidth,
+        strokeWidth,
+        strokeDashArray,
       });
 
       addToCanvas(object);
@@ -144,7 +190,8 @@ const buildEditor = ({
           ...TRIANGLE_OPTIONS,
           fill: fillColor,
           stroke: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth,
+          strokeDashArray,
         }
       );
 
@@ -165,7 +212,8 @@ const buildEditor = ({
           ...DIAMOND_OPTIONS,
           fill: fillColor,
           stroke: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth,
+          strokeDashArray,
         }
       );
 
@@ -173,8 +221,9 @@ const buildEditor = ({
     },
     getActiveFillColor,
     getActiveStrokeColor,
+    getActiveStrokeWidth,
+    getActiveStrokeDashArray,
     canvas,
-    strokeWidth,
     selectedObjects,
   };
 };
@@ -187,6 +236,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [fillColor, setFillColor] = useState(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
+  const [strokeDashArray, setStrokeDashArray] =
+    useState<number[]>(STROKE_DASH_ARRAY);
 
   useAutoResize({
     canvas,
@@ -210,11 +261,20 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         setStrokeColor,
         setStrokeWidth,
         selectedObjects,
+        strokeDashArray,
+        setStrokeDashArray,
       });
     }
 
     return undefined;
-  }, [canvas, fillColor, strokeColor, strokeWidth, selectedObjects]);
+  }, [
+    canvas,
+    fillColor,
+    strokeColor,
+    strokeWidth,
+    selectedObjects,
+    strokeDashArray,
+  ]);
 
   const init = useCallback(
     ({
