@@ -75,6 +75,12 @@ const buildEditor = ({
     return selectedObject?.get('strokeDashArray') || strokeDashArray;
   };
 
+  const getActiveOpacity = () => {
+    const selectedObject = selectedObjects[0];
+
+    return selectedObject?.get('opacity') || 1;
+  };
+
   return {
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
@@ -127,6 +133,12 @@ const buildEditor = ({
       setStrokeDashArray(value);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeDashArray: value });
+      });
+      canvas.renderAll();
+    },
+    changeOpacity: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ opacity: value });
       });
       canvas.renderAll();
     },
@@ -223,6 +235,7 @@ const buildEditor = ({
     getActiveStrokeColor,
     getActiveStrokeWidth,
     getActiveStrokeDashArray,
+    getActiveOpacity,
     canvas,
     selectedObjects,
   };

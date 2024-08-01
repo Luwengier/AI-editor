@@ -121,6 +121,7 @@ export interface Editor {
   changeStrokeColor: (color: string) => void;
   changeFillColor: (color: string) => void;
   changeStrokeDashArray: (value: number[]) => void;
+  changeOpacity: (value: number) => void;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;
@@ -131,6 +132,7 @@ export interface Editor {
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
+  getActiveOpacity: () => number;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
 }
