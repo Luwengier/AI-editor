@@ -24,12 +24,15 @@ export const Toolbar = ({
   activeTool,
   onChangeActiveTool,
 }: ToolbarProps) => {
-  const fillColor = editor?.getActiveFillColor();
-  const fontFamily = editor?.getActiveFontFamily();
-  const strokeColor = editor?.getActiveStrokeColor();
+  const initialFillColor = editor?.getActiveFillColor();
+  const initialFontFamily = editor?.getActiveFontFamily();
+  const initialStrokeColor = editor?.getActiveStrokeColor();
 
   const initialFontWeight = editor?.getActiveFontWeight() || FONT_WEIGHT;
   const [properties, setProperties] = useState({
+    fillColor: initialFillColor,
+    fontFamily: initialFontFamily,
+    strokeColor: initialStrokeColor,
     fontWeight: initialFontWeight,
   });
 
@@ -68,7 +71,7 @@ export const Toolbar = ({
             <div
               className="rounded-sm size-4 border"
               style={{
-                backgroundColor: fillColor,
+                backgroundColor: properties.fillColor,
               }}
             />
           </Button>
@@ -87,7 +90,7 @@ export const Toolbar = ({
                 <div
                   className="rounded-sm size-4 border-2 bg-transparent"
                   style={{
-                    borderColor: strokeColor,
+                    borderColor: properties.strokeColor,
                   }}
                 />
               </Button>
@@ -122,7 +125,9 @@ export const Toolbar = ({
                   activeTool === 'font' && 'bg-gray-100'
                 )}
               >
-                <div className="max-w-[100px] truncate">{fontFamily}</div>
+                <div className="max-w-[100px] truncate">
+                  {properties.fontFamily}
+                </div>
                 <ChevronDown className="size-4 ml-2 shrink-0" />
               </Button>
             </Hint>
