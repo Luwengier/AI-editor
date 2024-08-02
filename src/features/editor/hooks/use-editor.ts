@@ -62,6 +62,13 @@ const buildEditor = ({
     return (selectedObject?.get('fill') || fillColor) as string;
   };
 
+  const getActiveFontStyle = () => {
+    const selectedObject = selectedObjects[0];
+    // @ts-ignore
+    // Faulty TS library, fontStyle exists.
+    return selectedObject?.get('fontStyle') || 'normal';
+  };
+
   const getActiveFontFamily = () => {
     const selectedObject = selectedObjects[0];
     // @ts-ignore
@@ -135,6 +142,16 @@ const buildEditor = ({
           // @ts-ignore
           // Faulty TS library, fontFamily exists.
           object.set({ fontFamily: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontStyle: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, fontStyle exists.
+          object.set({ fontStyle: value });
         }
       });
       canvas.renderAll();
@@ -281,6 +298,7 @@ const buildEditor = ({
       addToCanvas(object);
     },
     getActiveFillColor,
+    getActiveFontStyle,
     getActiveFontFamily,
     getActiveFontWeight,
     getActiveStrokeColor,

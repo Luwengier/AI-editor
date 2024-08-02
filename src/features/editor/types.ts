@@ -154,6 +154,7 @@ export interface Editor {
   bringForward: () => void;
   sendBackward: () => void;
   changeFillColor: (color: string) => void;
+  changeFontStyle: (value: string) => void;
   changeFontFamily: (value: string) => void;
   changeFontWeight: (value: number) => void;
   changeStrokeWidth: (value: number) => void;
@@ -168,6 +169,7 @@ export interface Editor {
   addDiamond: () => void;
   addText: (value: string, options?: ITextboxOptions) => void;
   getActiveFillColor: () => string;
+  getActiveFontStyle: () => string;
   getActiveFontFamily: () => string;
   getActiveFontWeight: () => number;
   getActiveStrokeColor: () => string;
