@@ -1,17 +1,30 @@
 'use client';
 
+import { useState } from 'react';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  ArrowDown,
+  ArrowUp,
+  ChevronDown,
+} from 'lucide-react';
 import { BsBorderWidth } from 'react-icons/bs';
 import { RxTransparencyGrid } from 'react-icons/rx';
-import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 
 import { isTextType } from '@/features/editor/utils';
-import { ActiveTool, Editor, FONT_WEIGHT } from '@/features/editor/types';
+import { FontSizeInput } from '@/features/editor/components/font-size-input';
+import {
+  ActiveTool,
+  Editor,
+  FONT_SIZE,
+  FONT_WEIGHT,
+} from '@/features/editor/types';
 
 import { cn } from '@/lib/utils';
 import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 
 interface ToolbarProps {
   editor: Editor | undefined;
@@ -25,26 +38,50 @@ export const Toolbar = ({
   onChangeActiveTool,
 }: ToolbarProps) => {
   const initialFillColor = editor?.getActiveFillColor();
+  const initialTextAlign = editor?.getActiveTextAlign();
+  const initialFontSize = editor?.getActiveFontSize() || FONT_SIZE;
   const initialFontStyle = editor?.getActiveFontStyle();
+  const initialFontWeight = editor?.getActiveFontWeight() || FONT_WEIGHT;
   const initialFontFamily = editor?.getActiveFontFamily();
   const initialStrokeColor = editor?.getActiveStrokeColor();
   const initialFontLinethrough = editor?.getActiveFontLinethrough();
   const initialFontUnderline = editor?.getActiveFontUnderline();
 
-  const initialFontWeight = editor?.getActiveFontWeight() || FONT_WEIGHT;
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
+    textAlign: initialTextAlign,
+    fontSize: initialFontSize,
     fontStyle: initialFontStyle,
+    fontWeight: initialFontWeight,
     fontFamily: initialFontFamily,
     fontUnderline: initialFontUnderline,
     fontLinethrough: initialFontLinethrough,
     strokeColor: initialStrokeColor,
-    fontWeight: initialFontWeight,
   });
 
   const selectedObject = editor?.selectedObjects[0];
   const selectedObjectType = editor?.selectedObjects[0]?.type;
   const isText = isTextType(selectedObjectType);
+
+  const onChangeFontSize = (value: number) => {
+    if (!selectedObject) return;
+
+    editor?.changeFontSize(value);
+    setProperties((prev) => ({
+      ...prev,
+      fontSize: value,
+    }));
+  };
+
+  const onChangeTextAlign = (value: string) => {
+    if (!selectedObject) return;
+
+    editor?.changeTextAlign(value);
+    setProperties((prev) => ({
+      ...prev,
+      textAlign: value,
+    }));
+  };
 
   const toggleBold = () => {
     if (!selectedObject) return;
@@ -228,6 +265,56 @@ export const Toolbar = ({
                 <FaStrikethrough className="size-4" />
               </Button>
             </Hint>
+          </div>
+
+          <div className="flex items-center h-full justify-center">
+            <Hint label="Align left" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeTextAlign('left')}
+                size="icon"
+                variant="ghost"
+                className={cn(properties.textAlign === 'left' && 'bg-gray-100')}
+              >
+                <AlignLeft className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+
+          <div className="flex items-center h-full justify-center">
+            <Hint label="Align center" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeTextAlign('center')}
+                size="icon"
+                variant="ghost"
+                className={cn(
+                  properties.textAlign === 'center' && 'bg-gray-100'
+                )}
+              >
+                <AlignCenter className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+
+          <div className="flex items-center h-full justify-center">
+            <Hint label="Align right" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeTextAlign('right')}
+                size="icon"
+                variant="ghost"
+                className={cn(
+                  properties.textAlign === 'right' && 'bg-gray-100'
+                )}
+              >
+                <AlignRight className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+
+          <div className="flex items-center h-full justify-center">
+            <FontSizeInput
+              value={properties.fontSize}
+              onChange={onChangeFontSize}
+            />
           </div>
         </>
       )}

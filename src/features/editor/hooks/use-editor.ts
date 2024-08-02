@@ -16,6 +16,7 @@ import {
   TEXT_OPTIONS,
   FONT_FAMILY,
   FONT_WEIGHT,
+  FONT_SIZE,
 } from '@/features/editor/types';
 import { isTextType } from '@/features/editor/utils';
 import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
@@ -60,6 +61,20 @@ const buildEditor = ({
 
     // Currently, gradients & patterns are not supported
     return (selectedObject?.get('fill') || fillColor) as string;
+  };
+
+  const getActiveTextAlign = () => {
+    const selectedObject = selectedObjects[0];
+    // @ts-ignore
+    // Faulty TS library, textAlign exists.
+    return selectedObject?.get('textAlign') || 'left';
+  };
+
+  const getActiveFontSize = () => {
+    const selectedObject = selectedObjects[0];
+    // @ts-ignore
+    // Faulty TS library, fontSize exists.
+    return selectedObject?.get('fontSize') || FONT_SIZE;
   };
 
   const getActiveFontStyle = () => {
@@ -146,6 +161,26 @@ const buildEditor = ({
       setFillColor(color);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ fill: color });
+      });
+      canvas.renderAll();
+    },
+    changeTextAlign: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, textAlign exists.
+          object.set({ textAlign: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontSize: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, fontSize exists.
+          object.set({ fontSize: value });
+        }
       });
       canvas.renderAll();
     },
@@ -332,12 +367,14 @@ const buildEditor = ({
       addToCanvas(object);
     },
     getActiveFillColor,
+    getActiveTextAlign,
+    getActiveFontSize,
     getActiveFontStyle,
     getActiveFontFamily,
     getActiveFontWeight,
-    getActiveStrokeColor,
     getActiveFontUnderline,
     getActiveFontLinethrough,
+    getActiveStrokeColor,
     getActiveStrokeWidth,
     getActiveStrokeDashArray,
     getActiveOpacity,
