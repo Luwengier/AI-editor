@@ -137,6 +137,109 @@ const buildEditor = ({
   };
 
   return {
+    delete: () => {
+      canvas.getActiveObjects().forEach((object) => canvas.remove(object));
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    },
+    addText: (value, options) => {
+      const object = new fabric.Textbox(value, {
+        ...TEXT_OPTIONS,
+        fill: fillColor,
+        ...options,
+      });
+
+      addToCanvas(object);
+    },
+    addCircle: () => {
+      const object = new fabric.Circle({
+        ...CIRCLE_OPTIONS,
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth,
+        strokeDashArray,
+      });
+
+      addToCanvas(object);
+    },
+    addDiamond: () => {
+      const HEIGHT = DIAMOND_OPTIONS.height;
+      const WIDTH = DIAMOND_OPTIONS.width;
+
+      const object = new fabric.Polygon(
+        [
+          { x: WIDTH / 2, y: 0 },
+          { x: WIDTH, y: HEIGHT / 2 },
+          { x: WIDTH / 2, y: HEIGHT },
+          { x: 0, y: HEIGHT / 2 },
+        ],
+        {
+          ...DIAMOND_OPTIONS,
+          fill: fillColor,
+          stroke: strokeColor,
+          strokeWidth,
+          strokeDashArray,
+        }
+      );
+
+      addToCanvas(object);
+    },
+    addTriangle: () => {
+      const object = new fabric.Triangle({
+        ...RECTANGLE_OPTIONS,
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth,
+        strokeDashArray,
+      });
+
+      addToCanvas(object);
+    },
+    addRectangle: () => {
+      const object = new fabric.Rect({
+        ...RECTANGLE_OPTIONS,
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth,
+        strokeDashArray,
+      });
+
+      addToCanvas(object);
+    },
+    addSoftRectangle: () => {
+      const object = new fabric.Rect({
+        ...RECTANGLE_OPTIONS,
+        rx: 50,
+        ry: 50,
+        fill: fillColor,
+        stroke: strokeColor,
+        strokeWidth,
+        strokeDashArray,
+      });
+
+      addToCanvas(object);
+    },
+    addInverseTriangle: () => {
+      const HEIGHT = TRIANGLE_OPTIONS.height;
+      const WIDTH = TRIANGLE_OPTIONS.width;
+
+      const object = new fabric.Polygon(
+        [
+          { x: 0, y: 0 },
+          { x: WIDTH, y: 0 },
+          { x: WIDTH / 2, y: HEIGHT },
+        ],
+        {
+          ...TRIANGLE_OPTIONS,
+          fill: fillColor,
+          stroke: strokeColor,
+          strokeWidth,
+          strokeDashArray,
+        }
+      );
+
+      addToCanvas(object);
+    },
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.bringForward(object);
@@ -267,104 +370,6 @@ const buildEditor = ({
         object.set({ opacity: value });
       });
       canvas.renderAll();
-    },
-    addCircle: () => {
-      const object = new fabric.Circle({
-        ...CIRCLE_OPTIONS,
-        fill: fillColor,
-        stroke: strokeColor,
-        strokeWidth,
-        strokeDashArray,
-      });
-
-      addToCanvas(object);
-    },
-    addSoftRectangle: () => {
-      const object = new fabric.Rect({
-        ...RECTANGLE_OPTIONS,
-        rx: 50,
-        ry: 50,
-        fill: fillColor,
-        stroke: strokeColor,
-        strokeWidth,
-        strokeDashArray,
-      });
-
-      addToCanvas(object);
-    },
-    addRectangle: () => {
-      const object = new fabric.Rect({
-        ...RECTANGLE_OPTIONS,
-        fill: fillColor,
-        stroke: strokeColor,
-        strokeWidth,
-        strokeDashArray,
-      });
-
-      addToCanvas(object);
-    },
-    addTriangle: () => {
-      const object = new fabric.Triangle({
-        ...RECTANGLE_OPTIONS,
-        fill: fillColor,
-        stroke: strokeColor,
-        strokeWidth,
-        strokeDashArray,
-      });
-
-      addToCanvas(object);
-    },
-    addInverseTriangle: () => {
-      const HEIGHT = TRIANGLE_OPTIONS.height;
-      const WIDTH = TRIANGLE_OPTIONS.width;
-
-      const object = new fabric.Polygon(
-        [
-          { x: 0, y: 0 },
-          { x: WIDTH, y: 0 },
-          { x: WIDTH / 2, y: HEIGHT },
-        ],
-        {
-          ...TRIANGLE_OPTIONS,
-          fill: fillColor,
-          stroke: strokeColor,
-          strokeWidth,
-          strokeDashArray,
-        }
-      );
-
-      addToCanvas(object);
-    },
-    addDiamond: () => {
-      const HEIGHT = DIAMOND_OPTIONS.height;
-      const WIDTH = DIAMOND_OPTIONS.width;
-
-      const object = new fabric.Polygon(
-        [
-          { x: WIDTH / 2, y: 0 },
-          { x: WIDTH, y: HEIGHT / 2 },
-          { x: WIDTH / 2, y: HEIGHT },
-          { x: 0, y: HEIGHT / 2 },
-        ],
-        {
-          ...DIAMOND_OPTIONS,
-          fill: fillColor,
-          stroke: strokeColor,
-          strokeWidth,
-          strokeDashArray,
-        }
-      );
-
-      addToCanvas(object);
-    },
-    addText: (value, options) => {
-      const object = new fabric.Textbox(value, {
-        ...TEXT_OPTIONS,
-        fill: fillColor,
-        ...options,
-      });
-
-      addToCanvas(object);
     },
     getActiveFillColor,
     getActiveTextAlign,

@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import {
-  AlignCenter,
-  AlignLeft,
-  AlignRight,
-  ArrowDown,
+  Trash,
   ArrowUp,
+  AlignLeft,
+  ArrowDown,
+  AlignRight,
+  AlignCenter,
   ChevronDown,
 } from 'lucide-react';
 import { BsBorderWidth } from 'react-icons/bs';
@@ -351,7 +352,15 @@ export const Toolbar = ({
             variant="ghost"
             className={cn(activeTool === 'opacity' && 'bg-gray-100')}
           >
-            <RxTransparencyGrid />
+            <RxTransparencyGrid className="size-5" />
+          </Button>
+        </Hint>
+      </div>
+
+      <div className="flex items-center h-full justify-center">
+        <Hint label="Delete" side="bottom" sideOffset={5}>
+          <Button onClick={() => editor?.delete()} size="icon" variant="ghost">
+            <Trash className="size-5" />
           </Button>
         </Hint>
       </div>

@@ -151,6 +151,14 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  delete: () => void;
+  addText: (value: string, options?: ITextboxOptions) => void;
+  addCircle: () => void;
+  addDiamond: () => void;
+  addTriangle: () => void;
+  addRectangle: () => void;
+  addSoftRectangle: () => void;
+  addInverseTriangle: () => void;
   bringForward: () => void;
   sendBackward: () => void;
   changeFillColor: (color: string) => void;
@@ -165,13 +173,6 @@ export interface Editor {
   changeStrokeColor: (color: string) => void;
   changeStrokeDashArray: (value: number[]) => void;
   changeOpacity: (value: number) => void;
-  addCircle: () => void;
-  addSoftRectangle: () => void;
-  addRectangle: () => void;
-  addTriangle: () => void;
-  addInverseTriangle: () => void;
-  addDiamond: () => void;
-  addText: (value: string, options?: ITextboxOptions) => void;
   getActiveFillColor: () => string;
   getActiveTextAlign: () => string;
   getActiveFontSize: () => number;
