@@ -157,6 +157,8 @@ export interface Editor {
   changeFontStyle: (value: string) => void;
   changeFontFamily: (value: string) => void;
   changeFontWeight: (value: number) => void;
+  changeFontUnderline: (value: boolean) => void;
+  changeFontLinethrough: (value: boolean) => void;
   changeStrokeWidth: (value: number) => void;
   changeStrokeColor: (color: string) => void;
   changeStrokeDashArray: (value: number[]) => void;
@@ -172,6 +174,8 @@ export interface Editor {
   getActiveFontStyle: () => string;
   getActiveFontFamily: () => string;
   getActiveFontWeight: () => number;
+  getActiveFontUnderline: () => boolean;
+  getActiveFontLinethrough: () => boolean;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];

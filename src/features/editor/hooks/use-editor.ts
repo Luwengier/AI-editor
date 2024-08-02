@@ -69,6 +69,20 @@ const buildEditor = ({
     return selectedObject?.get('fontStyle') || 'normal';
   };
 
+  const getActiveFontUnderline = () => {
+    const selectedObject = selectedObjects[0];
+    // @ts-ignore
+    // Faulty TS library, underline exists.
+    return selectedObject?.get('underline') || false;
+  };
+
+  const getActiveFontLinethrough = () => {
+    const selectedObject = selectedObjects[0];
+    // @ts-ignore
+    // Faulty TS library, linethrough exists.
+    return selectedObject?.get('linethrough') || false;
+  };
+
   const getActiveFontFamily = () => {
     const selectedObject = selectedObjects[0];
     // @ts-ignore
@@ -152,6 +166,26 @@ const buildEditor = ({
           // @ts-ignore
           // Faulty TS library, fontStyle exists.
           object.set({ fontStyle: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontUnderline: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, fontStyle exists.
+          object.set({ underline: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontLinethrough: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, linethrough exists.
+          object.set({ linethrough: value });
         }
       });
       canvas.renderAll();
@@ -302,6 +336,8 @@ const buildEditor = ({
     getActiveFontFamily,
     getActiveFontWeight,
     getActiveStrokeColor,
+    getActiveFontUnderline,
+    getActiveFontLinethrough,
     getActiveStrokeWidth,
     getActiveStrokeDashArray,
     getActiveOpacity,
