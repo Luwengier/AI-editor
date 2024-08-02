@@ -1,15 +1,17 @@
 'use client';
 
+import { FaBold } from 'react-icons/fa6';
 import { BsBorderWidth } from 'react-icons/bs';
-import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 import { RxTransparencyGrid } from 'react-icons/rx';
+import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 
-import { ActiveTool, Editor } from '@/features/editor/types';
 import { isTextType } from '@/features/editor/utils';
+import { ActiveTool, Editor, FONT_WEIGHT } from '@/features/editor/types';
 
 import { cn } from '@/lib/utils';
 import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 interface ToolbarProps {
   editor: Editor | undefined;
@@ -26,8 +28,26 @@ export const Toolbar = ({
   const fontFamily = editor?.getActiveFontFamily();
   const strokeColor = editor?.getActiveStrokeColor();
 
+  const initialFontWeight = editor?.getActiveFontWeight() || FONT_WEIGHT;
+  const [properties, setProperties] = useState({
+    fontWeight: initialFontWeight,
+  });
+
   const selectedObjectType = editor?.selectedObjects[0]?.type;
   const isText = isTextType(selectedObjectType);
+
+  const toggleBold = () => {
+    const selectedObject = editor?.selectedObjects[0];
+    if (!selectedObject) return;
+
+    const newValue = properties.fontWeight > 500 ? 500 : 700;
+
+    editor?.changeFontWeight(newValue);
+    setProperties((prev) => ({
+      ...prev,
+      fontWeight: newValue,
+    }));
+  };
 
   if (editor?.selectedObjects.length === 0) {
     return (
@@ -109,13 +129,14 @@ export const Toolbar = ({
           </div>
 
           <div className="flex items-center h-full justify-center">
-            <Hint label="Bring forward" side="bottom" sideOffset={5}>
+            <Hint label="Bold" side="bottom" sideOffset={5}>
               <Button
-                onClick={() => editor?.bringForward()}
+                onClick={() => toggleBold()}
                 size="icon"
                 variant="ghost"
+                className={cn(properties.fontWeight > 500 && 'bg-gray-100')}
               >
-                <ArrowUp />
+                <FaBold />
               </Button>
             </Hint>
           </div>

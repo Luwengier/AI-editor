@@ -15,6 +15,7 @@ import {
   STROKE_DASH_ARRAY,
   TEXT_OPTIONS,
   FONT_FAMILY,
+  FONT_WEIGHT,
 } from '@/features/editor/types';
 import { isTextType } from '@/features/editor/utils';
 import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
@@ -66,6 +67,13 @@ const buildEditor = ({
     // @ts-ignore
     // Faulty TS library, fontFamily exists.
     return selectedObject?.get('fontFamily') || fontFamily;
+  };
+
+  const getActiveFontWeight = () => {
+    const selectedObject = selectedObjects[0];
+    // @ts-ignore
+    // Faulty TS library, fontWeight exists.
+    return selectedObject?.get('fontWeight') || FONT_WEIGHT;
   };
 
   const getActiveStrokeColor = () => {
@@ -127,6 +135,16 @@ const buildEditor = ({
           // @ts-ignore
           // Faulty TS library, fontFamily exists.
           object.set({ fontFamily: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontWeight: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, fontWeight exists.
+          object.set({ fontWeight: value });
         }
       });
       canvas.renderAll();
@@ -264,6 +282,7 @@ const buildEditor = ({
     },
     getActiveFillColor,
     getActiveFontFamily,
+    getActiveFontWeight,
     getActiveStrokeColor,
     getActiveStrokeWidth,
     getActiveStrokeDashArray,

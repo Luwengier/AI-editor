@@ -78,6 +78,7 @@ export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
 export const FONT_FAMILY = 'Arial';
 export const FONT_SIZE = 32;
+export const FONT_WEIGHT = 500;
 
 export const CIRCLE_OPTIONS = {
   radius: 225,
@@ -154,6 +155,7 @@ export interface Editor {
   sendBackward: () => void;
   changeFillColor: (color: string) => void;
   changeFontFamily: (value: string) => void;
+  changeFontWeight: (value: number) => void;
   changeStrokeWidth: (value: number) => void;
   changeStrokeColor: (color: string) => void;
   changeStrokeDashArray: (value: number[]) => void;
@@ -167,6 +169,7 @@ export interface Editor {
   addText: (value: string, options?: ITextboxOptions) => void;
   getActiveFillColor: () => string;
   getActiveFontFamily: () => string;
+  getActiveFontWeight: () => number;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
