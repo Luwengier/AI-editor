@@ -152,6 +152,7 @@ export type BuildEditorProps = {
 
 export interface Editor {
   delete: () => void;
+  addImage: (value: string) => void;
   addText: (value: string, options?: ITextboxOptions) => void;
   addCircle: () => void;
   addDiamond: () => void;
