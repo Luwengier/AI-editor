@@ -62,6 +62,7 @@ export const ImageSidebar = ({
                 return (
                   <button
                     key={image.id}
+                    onClick={() => editor?.addImage(image.urls.regular)}
                     className="relative w-full h-[100px] group hover:opacity-75 transition bg-muted rounded-sm overflow-hidden border"
                   >
                     <Image
