@@ -2,6 +2,32 @@ import { fabric } from 'fabric';
 import { ITextboxOptions } from 'fabric/fabric-impl';
 import material from 'material-colors';
 
+export const filters = [
+  'none',
+  'polaroid',
+  'sepia',
+  'kodachrome',
+  'contrast',
+  'brightness',
+  'greyscale',
+  'brownie',
+  'vintage',
+  'technicolor',
+  'pixelate',
+  'invert',
+  'blur',
+  'sharpen',
+  'emboss',
+  'removecolor',
+  'blacknwhite',
+  'vibrance',
+  'blendcolor',
+  'huerotate',
+  'resize',
+  'saturation',
+  'gamma',
+];
+
 export const fonts = [
   'Arial',
   'Arial Black',
@@ -168,6 +194,7 @@ export interface Editor {
   changeFontStyle: (value: string) => void;
   changeFontFamily: (value: string) => void;
   changeFontWeight: (value: number) => void;
+  changeImageFilter: (value: string) => void;
   changeFontUnderline: (value: boolean) => void;
   changeFontLinethrough: (value: boolean) => void;
   changeStrokeWidth: (value: number) => void;
