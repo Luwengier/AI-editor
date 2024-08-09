@@ -19,10 +19,13 @@ import {
   FONT_SIZE,
 } from '@/features/editor/types';
 import { createFilter, isTextType } from '@/features/editor/utils';
+import { useClipboard } from '@/features/editor/hooks/use-clipboard';
 import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
 import { useCanvasEvents } from '@/features/editor/hooks/use-canvas-events';
 
 const buildEditor = ({
+  copy,
+  paste,
   canvas,
   fillColor,
   fontFamily,
@@ -137,6 +140,8 @@ const buildEditor = ({
   };
 
   return {
+    copy,
+    paste,
     delete: () => {
       canvas.getActiveObjects().forEach((object) => canvas.remove(object));
       canvas.discardActiveObject();
@@ -430,6 +435,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
 
+  const { copy, paste } = useClipboard({ canvas });
+
   useAutoResize({
     canvas,
     container,
@@ -444,6 +451,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        copy,
+        paste,
         canvas,
         fillColor,
         fontFamily,
@@ -461,6 +470,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
     return undefined;
   }, [
+    copy,
+    paste,
     canvas,
     fillColor,
     fontFamily,

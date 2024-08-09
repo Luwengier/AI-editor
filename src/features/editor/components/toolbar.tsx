@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import {
+  Copy,
   Trash,
   ArrowUp,
   AlignLeft,
@@ -389,6 +390,21 @@ export const Toolbar = ({
             className={cn(activeTool === 'opacity' && 'bg-gray-100')}
           >
             <RxTransparencyGrid className="size-5" />
+          </Button>
+        </Hint>
+      </div>
+
+      <div className="flex items-center h-full justify-center">
+        <Hint label="Duplicate" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => {
+              editor?.copy();
+              editor?.paste();
+            }}
+            size="icon"
+            variant="ghost"
+          >
+            <Copy className="size-5" />
           </Button>
         </Hint>
       </div>

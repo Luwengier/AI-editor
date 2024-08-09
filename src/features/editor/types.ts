@@ -162,6 +162,8 @@ export interface EditorHookProps {
 }
 
 export type BuildEditorProps = {
+  copy: () => void;
+  paste: () => void;
   canvas: fabric.Canvas;
   fillColor: string;
   fontFamily: string;
@@ -177,6 +179,8 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  copy: () => void;
+  paste: () => void;
   delete: () => void;
   addImage: (value: string) => void;
   addText: (value: string, options?: ITextboxOptions) => void;
