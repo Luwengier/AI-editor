@@ -135,7 +135,6 @@ const buildEditor = ({
 
   const getActiveOpacity = () => {
     const selectedObject = selectedObjects[0];
-
     return selectedObject?.get('opacity') || 1;
   };
 
@@ -280,6 +279,16 @@ const buildEditor = ({
 
       const workspace = getWorkspace();
       workspace?.sendBackwards();
+    },
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = strokeColor;
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
     },
     changeFillColor: (color: string) => {
       setFillColor(color);

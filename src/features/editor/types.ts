@@ -192,6 +192,8 @@ export interface Editor {
   addInverseTriangle: () => void;
   bringForward: () => void;
   sendBackward: () => void;
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
   changeFillColor: (color: string) => void;
   changeTextAlign: (value: string) => void;
   changeFontSize: (value: number) => void;
