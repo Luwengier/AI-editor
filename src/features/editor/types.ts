@@ -180,6 +180,9 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  autoZoom: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
   copy: () => void;
   paste: () => void;
   delete: () => void;
