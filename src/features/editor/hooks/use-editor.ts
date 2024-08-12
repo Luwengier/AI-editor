@@ -24,6 +24,7 @@ import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
 import { useCanvasEvents } from '@/features/editor/hooks/use-canvas-events';
 
 const buildEditor = ({
+  autoZoom,
   copy,
   paste,
   canvas,
@@ -141,6 +142,19 @@ const buildEditor = ({
   return {
     copy,
     paste,
+    getWorkspace,
+    changeSize: (value: { width: number; height: number }) => {
+      const workspace = getWorkspace();
+
+      workspace?.set(value);
+      autoZoom();
+    },
+    changeBackground: (color: string) => {
+      const workspace = getWorkspace();
+
+      workspace?.set({ fill: color });
+      canvas.renderAll();
+    },
     delete: () => {
       canvas.getActiveObjects().forEach((object) => canvas.remove(object));
       canvas.discardActiveObject();
@@ -448,7 +462,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
   const { copy, paste } = useClipboard({ canvas });
 
-  useAutoResize({
+  const { autoZoom } = useAutoResize({
     canvas,
     container,
   });
@@ -462,6 +476,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        autoZoom,
         copy,
         paste,
         canvas,
@@ -481,6 +496,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
     return undefined;
   }, [
+    autoZoom,
     copy,
     paste,
     canvas,

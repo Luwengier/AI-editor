@@ -162,6 +162,7 @@ export interface EditorHookProps {
 }
 
 export type BuildEditorProps = {
+  autoZoom: () => void;
   copy: () => void;
   paste: () => void;
   canvas: fabric.Canvas;
@@ -207,6 +208,9 @@ export interface Editor {
   changeStrokeColor: (color: string) => void;
   changeStrokeDashArray: (value: number[]) => void;
   changeOpacity: (value: number) => void;
+  changeSize: (value: { width: number; height: number }) => void;
+  changeBackground: (color: string) => void;
+  getWorkspace: () => fabric.Object | undefined;
   getActiveFillColor: () => string;
   getActiveTextAlign: () => string;
   getActiveFontSize: () => number;
