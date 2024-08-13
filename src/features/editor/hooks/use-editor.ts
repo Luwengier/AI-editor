@@ -17,13 +17,20 @@ import {
   FONT_FAMILY,
   FONT_WEIGHT,
   FONT_SIZE,
+  JSON_KEYS,
 } from '@/features/editor/types';
 import { createFilter, isTextType } from '@/features/editor/utils';
+import { useHistory } from '@/features/editor/hooks/use-history';
 import { useClipboard } from '@/features/editor/hooks/use-clipboard';
 import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
 import { useCanvasEvents } from '@/features/editor/hooks/use-canvas-events';
 
 const buildEditor = ({
+  save,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
   autoZoom,
   copy,
   paste,
@@ -140,9 +147,18 @@ const buildEditor = ({
   };
 
   return {
+    undo,
+    redo,
     copy,
     paste,
+    canUndo,
+    canRedo,
     autoZoom,
+    delete: () => {
+      canvas.getActiveObjects().forEach((object) => canvas.remove(object));
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    },
     zoomIn: () => {
       let zoomRatio = canvas.getZoom();
       zoomRatio += 0.05;
@@ -160,24 +176,6 @@ const buildEditor = ({
         new fabric.Point(center.left, center.top),
         zoomRatio < 0.2 ? 0.2 : zoomRatio
       );
-    },
-    getWorkspace,
-    changeSize: (value: { width: number; height: number }) => {
-      const workspace = getWorkspace();
-
-      workspace?.set(value);
-      autoZoom();
-    },
-    changeBackground: (color: string) => {
-      const workspace = getWorkspace();
-
-      workspace?.set({ fill: color });
-      canvas.renderAll();
-    },
-    delete: () => {
-      canvas.getActiveObjects().forEach((object) => canvas.remove(object));
-      canvas.discardActiveObject();
-      canvas.renderAll();
     },
     addImage: (value: string) => {
       fabric.Image.fromURL(
@@ -323,6 +321,20 @@ const buildEditor = ({
     disableDrawingMode: () => {
       canvas.isDrawingMode = false;
     },
+    changeSize: (value: { width: number; height: number }) => {
+      const workspace = getWorkspace();
+
+      workspace?.set(value);
+      autoZoom();
+      save();
+    },
+    changeBackground: (color: string) => {
+      const workspace = getWorkspace();
+
+      workspace?.set({ fill: color });
+      canvas.renderAll();
+      save();
+    },
     changeFillColor: (color: string) => {
       setFillColor(color);
       canvas.getActiveObjects().forEach((object) => {
@@ -450,6 +462,7 @@ const buildEditor = ({
         }
       });
     },
+    getWorkspace,
     getActiveFillColor,
     getActiveTextAlign,
     getActiveFontSize,
@@ -479,6 +492,9 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
 
+  const { save, undo, redo, canUndo, canRedo, canvasHistory, setHistoryIndex } =
+    useHistory({ canvas });
+
   const { copy, paste } = useClipboard({ canvas });
 
   const { autoZoom } = useAutoResize({
@@ -487,6 +503,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   });
 
   useCanvasEvents({
+    save,
     canvas,
     setSelectedObjects,
     clearSelectionCallback,
@@ -495,6 +512,11 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        save,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
         autoZoom,
         copy,
         paste,
@@ -515,6 +537,11 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
     return undefined;
   }, [
+    save,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
     autoZoom,
     copy,
     paste,
@@ -567,8 +594,12 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
       setCanvas(initialCanvas);
       setContainer(initialContainer);
+
+      const currentState = JSON.stringify(initialCanvas.toJSON(JSON_KEYS));
+      canvasHistory.current = [currentState];
+      setHistoryIndex(0);
     },
-    []
+    [canvasHistory, setHistoryIndex]
   );
 
   return {
