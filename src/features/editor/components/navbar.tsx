@@ -3,15 +3,15 @@
 import { CiFileOn } from 'react-icons/ci';
 import { BsCloudCheck } from 'react-icons/bs';
 import {
-  ChevronDown,
-  Download,
-  MousePointerClick,
   Redo2,
   Undo2,
+  Download,
+  ChevronDown,
+  MousePointerClick,
 } from 'lucide-react';
 
 import { Logo } from '@/features/editor/components/logo';
-import { ActiveTool } from '@/features/editor/types';
+import { ActiveTool, Editor } from '@/features/editor/types';
 
 import { cn } from '@/lib/utils';
 import { Hint } from '@/components/hint';
@@ -25,11 +25,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface NavbarProps {
+  editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
+export const Navbar = ({
+  editor,
+  activeTool,
+  onChangeActiveTool,
+}: NavbarProps) => {
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[24px]">
       <Logo />
@@ -67,16 +72,28 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
             <MousePointerClick className="size-4" />
           </Button>
         </Hint>
+
         <Hint label="Undo" side="bottom" sideOffset={10}>
-          <Button variant="ghost" size="icon" onClick={() => {}} className="">
+          <Button
+            disabled={!editor?.canUndo}
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.undo()}
+          >
             <Undo2 className="size-4" />
           </Button>
         </Hint>
         <Hint label="Redo" side="bottom" sideOffset={10}>
-          <Button variant="ghost" size="icon" onClick={() => {}} className="">
+          <Button
+            disabled={!editor?.canRedo}
+            variant="ghost"
+            size="icon"
+            onClick={() => editor?.redo()}
+          >
             <Redo2 className="size-4" />
           </Button>
         </Hint>
+
         <Separator orientation="vertical" className="mx-2" />
         <div className="flex items-center gap-x-2">
           <BsCloudCheck className="size-5 text-muted-foreground" />
