@@ -110,7 +110,7 @@ export const Navbar = ({
             <DropdownMenuContent align="end" className="min-w-60">
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.saveJson()}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -122,7 +122,7 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.savePng()}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -134,7 +134,7 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.saveJpg()}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -146,7 +146,7 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => editor?.saveSvg()}
               >
                 <CiFileOn className="size-8" />
                 <div>
