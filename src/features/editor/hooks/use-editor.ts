@@ -25,11 +25,12 @@ import {
   isTextType,
   transformText,
 } from '@/features/editor/utils';
+import { useHotkeys } from '@/features/editor/hooks/use-hotkeys';
 import { useHistory } from '@/features/editor/hooks/use-history';
 import { useClipboard } from '@/features/editor/hooks/use-clipboard';
 import { useAutoResize } from '@/features/editor/hooks/use-auto-resize';
 import { useCanvasEvents } from '@/features/editor/hooks/use-canvas-events';
-import { useHotkeys } from '@/features/editor/hooks/use-hotkeys';
+import { useWindowEvents } from '@/features/editor/hooks/use-window-events';
 
 const buildEditor = ({
   save,
@@ -564,6 +565,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
+
+  useWindowEvents();
 
   const { save, undo, redo, canUndo, canRedo, canvasHistory, setHistoryIndex } =
     useHistory({ canvas });
