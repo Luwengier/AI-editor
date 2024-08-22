@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
+import { TriangleAlert } from 'lucide-react';
 
 import { useSignUp } from '@/features/auth/hooks/use-sign-up';
 
@@ -37,7 +38,11 @@ export const SignUpCard = () => {
       },
       {
         onSuccess: () => {
-          console.log('registered successfully');
+          signIn('credentials', {
+            email,
+            password,
+            callbackUrl: '/',
+          });
         },
       }
     );
@@ -55,7 +60,12 @@ export const SignUpCard = () => {
           Use your email or another service to continue
         </CardDescription>
       </CardHeader>
-
+      {!!mutation.error && (
+        <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+          <TriangleAlert className="size-4" />
+          <p>Something went wrong</p>
+        </div>
+      )}
       <CardContent className="space-y-5 px-0 pb-0">
         <form onSubmit={onCredentialSignUp} className="space-y-2.5">
           <Input
